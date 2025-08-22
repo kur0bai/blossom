@@ -1,25 +1,34 @@
-const { Character } = require("../models");
-const Redis = require("ioredis");
-const redis = new Redis({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-});
+const { Character, Origin } = require("../models");
 
-module.exports = {
+const resolvers = {
   Query: {
-    characters: async (_, filters) => {
-      const key = `characters:${JSON.stringify(filters)}`;
-      const cached = await redis.get(key);
-      if (cached) return JSON.parse(cached);
-
-      const where = {};
-      Object.entries(filters).forEach(([k, v]) => {
-        if (v) where[k] = v;
+    characters: async () => {
+      return await Character.findAll({
+        include: [{ model: Origin, as: "origin" }],
       });
+    },
+    character: async (_, { id }) => {
+      return await Character.findByPk(id, {
+        include: [{ model: Origin, as: "origin" }],
+      });
+    },
+  },
 
-      const results = await Character.findAll({ where });
-      await redis.set(key, JSON.stringify(results), "EX", 60);
-      return results;
+  Mutation: {
+    createCharacter: async (
+      _,
+      { external_id, name, species, status, gender, originId }
+    ) => {
+      return await Character.create({
+        external_id,
+        name,
+        species,
+        status,
+        gender,
+        originId,
+      });
     },
   },
 };
+
+module.exports = resolvers;
