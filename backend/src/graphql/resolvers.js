@@ -1,15 +1,26 @@
-const { Character, Origin } = require("../models");
+const { Character, Origin, Comment } = require("../models");
 
 const resolvers = {
   Query: {
     characters: async () => {
       return await Character.findAll({
-        include: [{ model: Origin, as: "origin" }],
+        include: [
+          { model: Origin, as: "origin" },
+          { model: Comment, as: "comments" },
+        ],
       });
     },
     character: async (_, { id }) => {
       return await Character.findByPk(id, {
-        include: [{ model: Origin, as: "origin" }],
+        include: [
+          { model: Origin, as: "origin" },
+          { model: Comment, as: "comments" },
+        ],
+      });
+    },
+    commentsByCharacter: async (_, { characterId }) => {
+      return await Comment.findAll({
+        where: { characterId },
       });
     },
   },
@@ -26,6 +37,14 @@ const resolvers = {
         status,
         gender,
         originId,
+      });
+    },
+
+    addComment: async (_, { characterId, content, userId }) => {
+      return await Comment.create({
+        characterId,
+        content,
+        userId,
       });
     },
   },

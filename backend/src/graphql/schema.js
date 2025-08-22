@@ -5,6 +5,15 @@ const typeDefs = gql`
     id: ID!
     name: String!
   }
+
+  type Comment {
+    id: ID!
+    content: String!
+    characterId: Int!
+    userId: Int
+    createdAt: String!
+  }
+
   type Character {
     id: ID!
     external_id: Int!
@@ -13,11 +22,13 @@ const typeDefs = gql`
     status: String
     gender: String
     origin: Origin
+    comments: [Comment!]!
   }
 
   type Query {
     characters: [Character!]!
     character(id: ID!): Character
+    commentsByCharacter(characterId: ID!): [Comment!]!
   }
 
   type Mutation {
@@ -29,6 +40,8 @@ const typeDefs = gql`
       gender: String
       originId: ID
     ): Character!
+
+    addComment(characterId: ID!, content: String!, userId: Int): Comment!
   }
 `;
 
