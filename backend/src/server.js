@@ -1,31 +1,26 @@
-import "dotenv/config";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { typeDefs } from "./graphql/schema.js";
-import { resolvers } from "./graphql/resolvers.js";
-import { sequelize } from "./db/index.js";
-import { connectRedis } from "./cache/redis.js";
+require("dotenv").config();
+const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
+const typeDefs = require("./graphql/schema");
+const resolvers = require("./graphql/resolvers");
+const logger = require("./middleware/logger");
+const { sequelize } = require("./models");
 
-async function bootstrap() {
-  const app = express();
+const app = express();
+app.use(logger);
 
-  app.get("/health", (_, res) => res.send("ok"));
-
+async function start() {
   const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();
-  server.applyMiddleware({ app, path: "/graphql" });
+  server.applyMiddleware({ app });
 
   await sequelize.authenticate();
-  await connectRedis();
+  console.log("DB connected");
 
-  const port = process.env.PORT || 4000;
-  app.listen(port, () => {
-    console.log(`HTTP http://localhost:${port}`);
-    console.log(`GraphQL http://localhost:${port}/graphql`);
-  });
+  app.listen(process.env.PORT, () =>
+    console.log(
+      `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+    )
+  );
 }
-
-bootstrap().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
-});
+start();
