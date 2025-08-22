@@ -1,4 +1,4 @@
-export default (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const Character = sequelize.define(
     "Character",
     {
@@ -6,11 +6,21 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      species: DataTypes.STRING,
-      status: DataTypes.STRING,
-      gender: DataTypes.STRING,
+      species: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      gender: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {}
   );
+
   return Character;
 };
