@@ -1,9 +1,26 @@
 import { CHARACTER_BUTTONS, SPECIE_BUTTONS } from "@/constants/filterButtons";
-import React, { useState } from "react";
+import clsx from "clsx";
+import { useState } from "react";
 
-export const FilterPanel = () => {
-  const [characterFilter, setCharacterFilter] = useState();
-  const [specieFilter, setSpecieFilter] = useState();
+interface FilterPanelProps {
+  characterFilter: string;
+  specieFilter: string;
+  onApplyFilter: (character: string, specie: string) => void;
+}
+
+export const FilterPanel = ({
+  characterFilter,
+  specieFilter,
+  onApplyFilter,
+}: FilterPanelProps) => {
+  //I'll use temp filters to avoid instant filtering xd
+  const [localCharacterFilter, setLocalCharacterFilter] =
+    useState(characterFilter);
+  const [localSpecieFilter, setLocalSpecieFilter] = useState(specieFilter);
+
+  const handleApply = () => {
+    onApplyFilter(localCharacterFilter, localSpecieFilter);
+  };
 
   return (
     <div className="absolute top-36 bg-white shadow w-[25%] left-3 border mx-auto z-[100] px-8 py-6 rounded-lg gap-4 flex flex-col">
@@ -12,31 +29,46 @@ export const FilterPanel = () => {
         <div className="flex flex-row justify-between gap-5">
           {CHARACTER_BUTTONS.map((btn) => (
             <button
-              className="border w-full hover:text-primary-700 hover:bg-primary-100 py-4 rounded-md duration-300 capitalize"
-              title={btn.value}
-              value={btn.value}
+              key={btn.id}
+              className={clsx(
+                "border w-full py-4 rounded-md duration-300 capitalize",
+                localCharacterFilter === btn.value
+                  ? "bg-primary-100 text-primary-700"
+                  : "bg-white hover:text-primary-700 hover:bg-primary-100"
+              )}
+              onClick={() => setLocalCharacterFilter(btn.value)}
             >
               {btn.value}
             </button>
           ))}
         </div>
       </div>
+
       <div>
         <h3 className="text-gray-400 mb-4">Specie</h3>
         <div className="flex flex-row justify-between gap-5">
           {SPECIE_BUTTONS.map((btn) => (
             <button
-              className="border w-full hover:text-primary-700 hover:bg-primary-100 py-4 rounded-md duration-300 capitalize"
-              title={btn.value}
-              value={btn.value}
+              key={btn.id}
+              className={clsx(
+                "border w-full py-4 rounded-md duration-300 capitalize",
+                localSpecieFilter === btn.value
+                  ? "bg-primary-100 text-primary-700"
+                  : "bg-white hover:text-primary-700 hover:bg-primary-100"
+              )}
+              onClick={() => setLocalSpecieFilter(btn.value)}
             >
               {btn.value}
             </button>
           ))}
         </div>
       </div>
+
       <div>
-        <button className="bg-primary-700 text-white min-w-[200px] hover:text-primary-600  py-4 rounded-md duration-300 capitalize w-full">
+        <button
+          className="bg-primary-700 text-white min-w-[200px] hover:text-primary-600  py-4 rounded-md duration-300 capitalize w-full"
+          onClick={handleApply}
+        >
           Filter
         </button>
       </div>
