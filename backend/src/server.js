@@ -6,6 +6,9 @@ const resolvers = require("./graphql/resolvers");
 const logger = require("./middleware/logger");
 const { sequelize } = require("./models");
 
+//cron
+require("./crone/updateCharacters");
+
 const app = express();
 app.use(logger);
 
