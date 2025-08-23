@@ -1,13 +1,11 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import { Card } from "./Card";
 import type { ICharacter } from "@/types/character";
-import { Filter } from "./Filter";
+import { Filter } from "../Filter/Filter";
 import { useState } from "react";
-import { FilterPanel } from "./FilterPanel";
-import { useFavoritesStore } from "@/store/useFavoriteStore";
+import { FilterPanel } from "../Filter/FilterPanel";
 import { FavoritesList } from "../Favorites/FavoritesList";
-import { CharactersList } from "./CharactersList";
+import { CharactersList } from "../Character/CharactersList";
 
 const GET_CHARACTERS = gql`
   query GetCharacters {
@@ -113,9 +111,7 @@ export const List = () => {
       )}
 
       <FavoritesList />
-
       <div className="my-2" />
-
       <CharactersList characters={characters} />
     </div>
   );

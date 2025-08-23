@@ -10,9 +10,11 @@ export const FavoritesList = () => {
       <h3 className="text-md font-semibold uppercase text-gray-400 pb-5 mx-5">
         Starred Characters ({favorites.length ?? 0})
       </h3>
-      {favorites?.map((fav) => (
-        <Card key={fav.external_id} character={fav} />
-      ))}
+      <div className="overflow-y-scroll max-h-[50vh]">
+        {favorites?.map((fav) => (
+          <Card key={fav.external_id} character={fav} />
+        ))}
+      </div>
     </div>
   );
 };
