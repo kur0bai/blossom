@@ -2,12 +2,14 @@ const { Character, Origin, Comment } = require("../models");
 
 const resolvers = {
   Query: {
-    characters: async () => {
+    characters: async (_, { limit = 15, offset = 0 }) => {
       return await Character.findAll({
         include: [
           { model: Origin, as: "origin" },
           { model: Comment, as: "comments" },
         ],
+        limit,
+        offset,
       });
     },
     character: async (_, { id }) => {

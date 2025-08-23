@@ -14,11 +14,11 @@ export const Filter = ({
   isPanelOpen,
 }: FilterProps) => {
   return (
-    <div className="bg-gray-100 flex flex-row items-center py-2 px-4 rounded-lg justify-between">
+    <div className="bg-gray-100 flex flex-row items-center py-2 px-4 rounded-lg my-5">
       <LucideSearch className="text-gray-400" />{" "}
       <input
         type="text"
-        className="border-none bg-transparent px-2 py-1 focus:outline-none"
+        className="border-none bg-transparent px-2 py-1 focus:outline-none w-full"
         placeholder="Search or filter results"
         onChange={(e) => onSearchChange(e.target.value)}
       />

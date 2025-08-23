@@ -5,6 +5,9 @@ import type { ICharacter } from "@/types/character";
 import { Filter } from "./Filter";
 import { useState } from "react";
 import { FilterPanel } from "./FilterPanel";
+import { useFavoritesStore } from "@/store/useFavoriteStore";
+import { FavoritesList } from "../Favorites/FavoritesList";
+import { CharactersList } from "./CharactersList";
 
 const GET_CHARACTERS = gql`
   query GetCharacters {
@@ -40,8 +43,18 @@ export const List = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [sortFilter, setSortFilter] = useState<"az" | "za">("az");
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p> Error: {error.message}</p>;
+  if (loading)
+    return (
+      <div className="w-full flex justify-center h-screen items-center">
+        <span className="text-gray-600 text-xl">Loading...</span>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="w-full flex justify-center h-screen items-center">
+        <p className="text-xl text-red-600"> Error: {error.message}</p>;
+      </div>
+    );
 
   let characters = [...(data?.characters || [])].filter((char) =>
     char.name.toLowerCase().includes(search.toLowerCase())
@@ -80,10 +93,11 @@ export const List = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-gray-100/20 p-4">
+    <div className="w-full flex flex-col bg-gray-100/20 p-4 px-6">
       <h2 className="text-gray-700 font-bold text-3xl mb-4">
         Rick and Morty list
       </h2>
+      {/* Filter */}
       <Filter
         onSearchChange={setSearch}
         isPanelOpen={isPanelOpen}
@@ -97,10 +111,12 @@ export const List = () => {
           sortFilter={sortFilter}
         />
       )}
+
+      <FavoritesList />
+
       <div className="my-2" />
-      {characters.map((character: ICharacter) => (
-        <Card key={character.external_id} character={character} />
-      ))}
+
+      <CharactersList characters={characters} />
     </div>
   );
 };

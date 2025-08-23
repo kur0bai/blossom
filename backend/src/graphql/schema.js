@@ -27,7 +27,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    characters: [Character!]!
+    characters(limit: Int, offset: Int): [Character!]!
     character(id: ID!): Character
     commentsByCharacter(characterId: ID!): [Comment!]!
   }

@@ -1,4 +1,5 @@
 import { useCharacterStore } from "@/store/useCharacterStore";
+import { FavoriteButton } from "../Favorites/FavoriteButton";
 
 export const Detail = () => {
   const { selectedCharacter } = useCharacterStore();
@@ -14,12 +15,17 @@ export const Detail = () => {
 
   return (
     <div className="px-12 py-8">
-      <div className="w-24 h-24 relative rounded-full overflow-hidden bg-gray-100">
-        <img
-          src={selectedCharacter?.image}
-          className="object-cover"
-          alt={selectedCharacter?.name}
-        />
+      <div className="relative">
+        <div className="absolute z-[200] bottom-1 left-16 shadow rounded-full">
+          <FavoriteButton character={selectedCharacter} />
+        </div>
+        <div className="w-24 h-24 relative rounded-full overflow-hidden bg-gray-100">
+          <img
+            src={selectedCharacter?.image}
+            className="object-cover"
+            alt={selectedCharacter?.name}
+          />
+        </div>
       </div>
       <h3 className="text-2xl font-bold my-2">{selectedCharacter.name}</h3>
 
