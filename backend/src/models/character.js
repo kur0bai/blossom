@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "unknown",
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       tableName: "characters",

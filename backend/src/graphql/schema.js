@@ -21,6 +21,7 @@ const typeDefs = gql`
     species: String
     status: String
     gender: String
+    image: String
     origin: Origin
     comments: [Comment!]!
   }

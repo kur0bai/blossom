@@ -41,13 +41,14 @@ module.exports = {
         originMap[o.name] = o.id;
       });
 
-      const charactersToInsert = allCharacters.map((c) => ({
-        external_id: c.id,
-        name: c.name,
-        status: c.status || "unknown",
-        species: c.species,
-        gender: c.gender || "unknown",
-        originId: originMap[c.origin?.name] || null,
+      const charactersToInsert = allCharacters.map((character) => ({
+        external_id: character.id,
+        name: character.name,
+        status: character.status || "unknown",
+        species: character.species,
+        gender: character.gender || "unknown",
+        image: character.image,
+        originId: originMap[character.origin?.name] || null,
         createdAt: new Date(),
         updatedAt: new Date(),
       }));

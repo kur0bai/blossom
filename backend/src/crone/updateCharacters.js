@@ -25,6 +25,7 @@ async function updateCharacters() {
         species: char.species,
         status: char.status,
         gender: char.gender,
+        image: char.image,
         originId: origin ? origin[0].id : null,
       });
     }
