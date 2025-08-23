@@ -31,7 +31,7 @@ export const List = () => {
   const [sortFilter, setSortFilter] = useState<"az" | "za">("az");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const isFavorite = useFavoritesStore((state) => state.isFavorite);
+  const { isFavorite, updateFavorite } = useFavoritesStore();
 
   // when comments are added, update
   useEffect(() => {
@@ -45,7 +45,12 @@ export const List = () => {
         (char) => char.external_id === selectedCharacter?.external_id
       );
 
-      if (updatedCharacter) setCharacter(updatedCharacter);
+      if (updatedCharacter) {
+        setCharacter(updatedCharacter);
+        if (isFavorite(updatedCharacter.external_id)) {
+          updateFavorite(updatedCharacter);
+        }
+      }
     };
 
     update();

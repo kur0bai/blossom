@@ -7,6 +7,7 @@ type FavoritesStore = {
   addFavorite: (character: ICharacter) => void;
   removeFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
+  updateFavorite: (character: ICharacter) => void;
 };
 
 export const useFavoritesStore = create<FavoritesStore>()(
@@ -30,6 +31,13 @@ export const useFavoritesStore = create<FavoritesStore>()(
       },
       isFavorite: (id) => {
         return get().favorites.some((fav) => fav.external_id === id);
+      },
+      updateFavorite: (character) => {
+        set((state) => ({
+          favorites: state.favorites.map((fav) =>
+            fav.external_id === character.external_id ? character : fav
+          ),
+        }));
       },
     }),
     {
