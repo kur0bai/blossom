@@ -10,4 +10,9 @@ const SPECIE_BUTTONS = [
   { id: 3, value: "alien" },
 ];
 
-export { CHARACTER_BUTTONS, SPECIE_BUTTONS };
+const SORT_BUTTONS = [
+  { id: 1, label: "A-Z", value: "az" },
+  { id: 2, label: "Z-A", value: "za" },
+];
+
+export { CHARACTER_BUTTONS, SPECIE_BUTTONS, SORT_BUTTONS };

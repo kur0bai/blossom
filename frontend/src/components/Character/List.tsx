@@ -38,6 +38,7 @@ export const List = () => {
   const [characterFilter, setCharacterFilter] = useState("all");
   const [specieFilter, setSpecieFilter] = useState("all");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [sortFilter, setSortFilter] = useState<"az" | "za">("az");
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p> Error: {error.message}</p>;
@@ -61,9 +62,21 @@ export const List = () => {
     }
   }
 
-  const handleApplyFilter = (character: string, specie: string) => {
+  characters = [...characters].sort((a, b) => {
+    if (sortFilter === "az") return a.name.localeCompare(b.name);
+    if (sortFilter === "za") return b.name.localeCompare(a.name);
+    return 0;
+  });
+
+  const handleApplyFilter = (
+    character: string,
+    specie: string,
+    sort: "az" | "za"
+  ) => {
     setCharacterFilter(character);
     setSpecieFilter(specie);
+    setSortFilter(sort);
+    setIsPanelOpen(false);
   };
 
   return (
@@ -81,6 +94,7 @@ export const List = () => {
           characterFilter={characterFilter}
           specieFilter={specieFilter}
           onApplyFilter={handleApplyFilter}
+          sortFilter={sortFilter}
         />
       )}
       <div className="my-2" />
