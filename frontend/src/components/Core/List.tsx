@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import type { ICharacter } from "@/types/character";
 import { Filter } from "../Filter/Filter";
@@ -6,27 +5,7 @@ import { useState } from "react";
 import { FilterPanel } from "../Filter/FilterPanel";
 import { FavoritesList } from "../Favorites/FavoritesList";
 import { CharactersList } from "../Character/CharactersList";
-
-const GET_CHARACTERS = gql`
-  query GetCharacters {
-    characters {
-      id
-      external_id
-      name
-      status
-      image
-      species
-      gender
-      comments {
-        content
-      }
-      origin {
-        id
-        name
-      }
-    }
-  }
-`;
+import { GET_CHARACTERS } from "@/api/graphql/mutations/characters";
 
 type GetCharactersData = {
   characters: ICharacter[];
@@ -91,7 +70,7 @@ export const List = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-gray-100/20 p-4 px-6 relative">
+    <div className="w-full flex flex-col bg-gray-100/40 p-4 px-6 relative">
       <h2 className="text-gray-700 font-bold text-3xl mb-4">
         Rick and Morty list
       </h2>

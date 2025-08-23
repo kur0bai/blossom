@@ -1,8 +1,12 @@
 import { useCharacterStore } from "@/store/useCharacterStore";
 import { FavoriteButton } from "../Favorites/FavoriteButton";
+import { CommentsList } from "../Comments/CommentsList";
+import { CommentForm } from "../Comments/CommentsForm";
 
 export const CharacterDetail = () => {
   const { selectedCharacter } = useCharacterStore();
+
+  console.log("Selec", selectedCharacter?.comments);
 
   if (!selectedCharacter)
     return (
@@ -43,6 +47,10 @@ export const CharacterDetail = () => {
           <span className="text-gray-400">{selectedCharacter.origin.name}</span>
         </div>
       </div>
+
+      {/* Comments */}
+      <CommentsList comments={selectedCharacter.comments} />
+      <CommentForm character={selectedCharacter} />
     </div>
   );
 };
