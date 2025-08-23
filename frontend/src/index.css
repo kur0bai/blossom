@@ -2,19 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
-  --color-primary-100: ##eee3ff; /* Primary 100 */
-  --color-primary-600: ##8054c7; /* Primary 600 */
-  --color-primary-700: ##5a3696; /* Primary 700 */
-  --color-secondary-600: ##63d838; /* Secondary 600 */
+font-face {
+  font-family: "Greycliff";
+  src: url("/fonts/Greycliffcf-regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
-
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Greycliff", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
-
 a {
   font-weight: 500;
   color: #646cff;

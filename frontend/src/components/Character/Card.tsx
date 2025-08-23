@@ -1,19 +1,26 @@
 import type { ICharacter } from "@/types/character";
 
+import { StarredButton } from "./StarredButton";
+
 interface CardProps {
   character: ICharacter;
 }
 
 export const Card: React.FC<CardProps> = ({ character }) => {
   return (
-    <div className="bg-gray-100 hover:bg-primary-100 flex flex-row">
-      <div className="w-10 h-10 relative rounded-10">
-        <img src={character?.image} className="w-10 h-10" />
+    <div className="flex flex-row px-4 py-6 gap-10 bg-red-500 border-t rounded bg-white hover:bg-primary-100 duration-300 items-center">
+      <div className="w-10 h-10 relative rounded-full overflow-hidden bg-gray-100">
+        <img
+          src={character?.image}
+          className="object-cover"
+          alt={character?.name}
+        />
       </div>
-      <div>
-        <h3>{character.name}</h3>
-        <span>{character.species}</span>
+      <div className="leading-tight w-1/2">
+        <h3 className="text-xl">{character.name}</h3>
+        <span className="text-gray-400">{character.species}</span>
       </div>
+      <StarredButton isStarred={false} />
     </div>
   );
 };
