@@ -1,24 +1,61 @@
 import { useQuery } from "@apollo/client/react";
 import type { ICharacter } from "@/types/character";
+import { useState, useEffect } from "react";
 import { Filter } from "../Filter/Filter";
-import { useState } from "react";
 import { FilterPanel } from "../Filter/FilterPanel";
 import { FavoritesList } from "../Favorites/FavoritesList";
 import { CharactersList } from "../Character/CharactersList";
 import { GET_CHARACTERS } from "@/api/graphql/mutations/characters";
+import { useCharacterStore } from "@/store/useCharacterStore";
+import { useFavoritesStore } from "@/store/useFavoriteStore";
 
 type GetCharactersData = {
   characters: ICharacter[];
 };
 
 export const List = () => {
-  const { data, loading, error } = useQuery<GetCharactersData>(GET_CHARACTERS);
-  //filters hehe
+  const { data, loading, error, refetch } =
+    useQuery<GetCharactersData>(GET_CHARACTERS);
+
+  const {
+    commentsUpdated,
+    setCommentsUpdated,
+    selectedCharacter,
+    setCharacter,
+  } = useCharacterStore();
+
+  // filters hehe :D
   const [search, setSearch] = useState("");
   const [characterFilter, setCharacterFilter] = useState("all");
   const [specieFilter, setSpecieFilter] = useState("all");
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [sortFilter, setSortFilter] = useState<"az" | "za">("az");
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const isFavorite = useFavoritesStore((state) => state.isFavorite);
+
+  // when comments are added, update
+  useEffect(() => {
+    if (!commentsUpdated) return;
+
+    const update = async () => {
+      const { data: newData } = await refetch();
+      setCommentsUpdated(false);
+
+      const updatedCharacter = newData?.characters?.find(
+        (char) => char.external_id === selectedCharacter?.external_id
+      );
+
+      if (updatedCharacter) setCharacter(updatedCharacter);
+    };
+
+    update();
+  }, [
+    commentsUpdated,
+    refetch,
+    selectedCharacter,
+    setCharacter,
+    setCommentsUpdated,
+  ]);
 
   if (loading)
     return (
@@ -26,18 +63,19 @@ export const List = () => {
         <span className="text-gray-600 text-xl">Loading...</span>
       </div>
     );
+
   if (error)
     return (
       <div className="w-full flex justify-center h-screen items-center">
-        <p className="text-xl text-red-600"> Error: {error.message}</p>;
+        <p className="text-xl text-red-600"> Error: {error.message}</p>
       </div>
     );
 
-  let characters = [...(data?.characters || [])].filter((char) =>
-    char.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // prevent re render favorites (duplicate)
+  let characters = [...(data?.characters || [])]
+    .filter((char) => char.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((char) => !isFavorite(char.external_id));
 
-  //filtering by specie :D
   if (specieFilter !== "all") {
     characters = characters.filter(
       (c) => c.species.toLowerCase() === specieFilter.toLowerCase()
@@ -45,18 +83,18 @@ export const List = () => {
   }
 
   if (characterFilter !== "all") {
-    if (characterFilter === "starred") {
-      characters = characters.filter((c) => c.status === "Alive");
-    } else if (characterFilter === "others") {
-      characters = characters.filter((c) => c.status !== "Alive");
-    }
+    characters = characters.filter((c) =>
+      characterFilter === "starred"
+        ? c.status === "Alive"
+        : c.status !== "Alive"
+    );
   }
 
-  characters = [...characters].sort((a, b) => {
-    if (sortFilter === "az") return a.name.localeCompare(b.name);
-    if (sortFilter === "za") return b.name.localeCompare(a.name);
-    return 0;
-  });
+  characters.sort((a, b) =>
+    sortFilter === "az"
+      ? a.name.localeCompare(b.name)
+      : b.name.localeCompare(a.name)
+  );
 
   const handleApplyFilter = (
     character: string,
@@ -72,25 +110,30 @@ export const List = () => {
   return (
     <div className="w-full flex flex-col bg-gray-100/40 p-4 px-6 relative">
       <h2 className="text-gray-700 font-bold text-3xl mb-4">
-        Rick and Morty list
+        Rick and Morty List
       </h2>
-      {/* Filter */}
+
+      {/* Search & Filter */}
       <Filter
         onSearchChange={setSearch}
         isPanelOpen={isPanelOpen}
         setIsPanelOpen={setIsPanelOpen}
       />
+
       {isPanelOpen && (
         <FilterPanel
           characterFilter={characterFilter}
           specieFilter={specieFilter}
-          onApplyFilter={handleApplyFilter}
           sortFilter={sortFilter}
           setIsPanelOpen={setIsPanelOpen}
+          onApplyFilter={handleApplyFilter}
         />
       )}
 
+      {/* Favorites */}
       <FavoritesList />
+
+      {/* Characters */}
       <div className="my-2" />
       <CharactersList characters={characters} />
     </div>

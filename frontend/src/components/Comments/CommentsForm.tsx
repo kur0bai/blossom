@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client/react";
 import { ADD_COMMENT } from "@/api/graphql/mutations/comments";
 import type { ICharacter, IComment } from "@/types/character";
 import { MessagesSquare } from "lucide-react";
+import { useCharacterStore } from "@/store/useCharacterStore";
 
 interface CommentFormProps {
   character: ICharacter;
@@ -15,6 +16,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
 }) => {
   const [content, setContent] = useState("");
   const [addComment, { loading, error }] = useMutation(ADD_COMMENT);
+  const setCommentsUpdated = useCharacterStore(
+    (state) => state.setCommentsUpdated
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +40,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       ) {
         onCommentAdded((data as { addComment: any }).addComment);
       }
+      setCommentsUpdated(true);
     } catch (err) {
       console.error(err);
     }

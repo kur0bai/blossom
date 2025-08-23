@@ -1,5 +1,5 @@
 import { CharacterDetail } from "@/components/Character/CharacterDetail";
-import { List } from "@/components/Core/List";
+import { List } from "@/components/Common/List";
 
 const Home = () => {
   return (
