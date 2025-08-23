@@ -91,7 +91,7 @@ export const List = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-gray-100/20 p-4 px-6">
+    <div className="w-full flex flex-col bg-gray-100/20 p-4 px-6 relative">
       <h2 className="text-gray-700 font-bold text-3xl mb-4">
         Rick and Morty list
       </h2>
@@ -107,6 +107,7 @@ export const List = () => {
           specieFilter={specieFilter}
           onApplyFilter={handleApplyFilter}
           sortFilter={sortFilter}
+          setIsPanelOpen={setIsPanelOpen}
         />
       )}
 

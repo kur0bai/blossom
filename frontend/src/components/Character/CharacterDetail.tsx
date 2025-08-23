@@ -1,7 +1,7 @@
 import { useCharacterStore } from "@/store/useCharacterStore";
 import { FavoriteButton } from "../Favorites/FavoriteButton";
 
-export const Detail = () => {
+export const CharacterDetail = () => {
   const { selectedCharacter } = useCharacterStore();
 
   if (!selectedCharacter)
