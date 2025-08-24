@@ -202,6 +202,7 @@ flowchart TD
 - **useFavoritesStore**: Manages favorites with local persistence.
 - **useCharacterStore**: Manages selected character and triggers updates on comments.
 - **useCharacterStore**: I decided to use anonymous comments, cause is more flexible to making some tests in short time.
+- **List.test.tsx**: I did a simple test case to check if graphql is working to run it `npm run test`
 
 ## Captures
 
